@@ -10,6 +10,8 @@
 
 .justify-evenly { justify-content: space-evenly }
 
+.no-focus-outline:focus { outline: none }
+
 .App {
   height: 100vh;
 }
