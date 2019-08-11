@@ -1,4 +1,4 @@
-.img-container { margin: 0 auto; }
+.img-container { margin: 0 }
 
 .img-container img { width: 100%; }
 
@@ -11,6 +11,8 @@
 .justify-evenly { justify-content: space-evenly }
 
 .no-focus-outline:focus { outline: none }
+
+.ph-silver::placeholder { color: silver }
 
 .App {
   height: 100vh;

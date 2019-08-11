@@ -17,7 +17,7 @@ class Homepage extends React.Component{
                     <h1 className="f1 white text-shadow">社博實境解謎</h1>
                     <h2 className="f3 white ma0 text-shadow">現正進行中</h2>
                     <h3 className="f6 white text-shadow">2019.9.20~2019.9.27</h3>
-                    <button className="br3 w-50 h3 mv5 bg-yellow f3 shadow-3">立刻參加</button>
+                    <button onClick={()=>window.location="/messenger"} className="br3 w-50 h3 mv5 bg-yellow f3 shadow-3">立刻參加</button>
                 </div>
             </React.Fragment>
         )
