@@ -4,7 +4,7 @@ import './App.css';
 import Homepage from './container/Homepage'
 import MenuContainer from './container/MenuContainer'
 import Messengerpage from './container/Messengerpage'
-import Loginpage from './container/Loginpage.js'
+// import Loginpage from './container/Loginpage'
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       <div className="App">
         <MenuContainer></MenuContainer>
         <Route exact path="/" component={Homepage}></Route>
-        <Route exact path="/login" component={Loginpage}></Route>
+        {/* <Route exact path="/login" component={Loginpage}></Route> */}
         <Route exact path="/messenger" component={Messengerpage}></Route>
       </div>
     </BrowserRouter>
