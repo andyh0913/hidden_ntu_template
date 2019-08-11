@@ -14,6 +14,8 @@
 
 .ph-silver::placeholder { color: silver }
 
+.border-none { border: none }
+
 .App {
   height: 100vh;
 }
@@ -25,4 +27,9 @@
 @keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
+}
+
+#chatButton {
+  background-image: url("/images/pawprint.png");
+  background-size: cover;
 }

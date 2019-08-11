@@ -18,8 +18,6 @@ class Messengerpage extends React.Component {
         .catch(err => console.error(err));
     }
 
-    // TODO: add database
-
     render(){
         return (
             <div className="fixed flex flex-column justify-between w-100 h-100 bg-black">
