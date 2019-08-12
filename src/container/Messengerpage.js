@@ -34,7 +34,7 @@ class Messengerpage extends React.Component {
     render(){
         return (
             <div className="fixed flex flex-column justify-between w-100 h-100 bg-black">
-                <div className="w-100 h4 bg-black o-80 flex flex-row justify-start items-center pa3">
+                <div className="flex-shrink-0 w-100 h4 bg-black o-80 flex flex-row justify-start items-center pa3">
                     <div className="img-container mw3 mh3">
                         <img alt="" className="br-100" src="/images/blackman.jpg"></img>
                     </div>
