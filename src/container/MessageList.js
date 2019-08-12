@@ -5,7 +5,7 @@ const MessageList = (props) => {
     const messages = props.messages;
     const messageDoms = messages.map( x => <SingleMessage {...x}></SingleMessage> )
     return (
-        <div className="w-100 flex-grow-1 overflow-auto white pa4 flex flex-column justify-start">
+        <div className="w-100 flex-grow-1 overflow-auto white ph4 flex flex-column justify-start">
             {messageDoms}
         </div>
     )

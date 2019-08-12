@@ -30,7 +30,7 @@ class ChatBar extends React.Component {
 
     render(){
         return (
-            <div className="w-100 h3 bg-black o-80 ph4 flex flex-row justify-between items-center">
+            <div className="w-100 h--5 bg-black o-80 ph4 flex-shrink-0 flex flex-row justify-between items-center">
                 <input type="text" value={this.state.value} onChange={this.handleChange} placeholder="說點什麼吧..." className="br-pill h2 ph2 bg-gray ba b--gray ph-silver white flex-grow-1 fw2"/>
                 <button id="chatButton" className="bg-transparent h2 w2 border-none ml3 grow"
                 onClick={this.handleButtonClick}></button>
