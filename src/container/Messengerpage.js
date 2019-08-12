@@ -1,21 +1,34 @@
 import React from 'react'
-import Messages from './Messages'
+import MessageList from './MessageList'
 import ChatBar from '../component/ChatBar'
 import '../App.css'
+import io from 'socket.io-client';
 
 class Messengerpage extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            messages: []
+            messages: [],
+            socket: io()
         }
         
-        fetch('/api/post')
+        fetch('/api/post?user=test')
         .then(res => res.json())
         .then(data => {
             this.setState({messages: data});
         })
         .catch(err => console.error(err));
+
+        this.state.socket.on('message', (obj) => {
+            this.pushNewMessage(obj);
+        })
+    }
+
+    pushNewMessage = (message) => {
+        console.log("update message");
+        this.setState((prevState) => ({
+            messages: [...prevState.messages, message]
+        }));
     }
 
     render(){
@@ -27,8 +40,8 @@ class Messengerpage extends React.Component {
                     </div>
                     <h4 className="white f4 normal ml3">身分不明的研究員</h4>
                 </div>
-                <Messages messages={this.state.messages}></Messages>
-                <ChatBar></ChatBar>
+                <MessageList messages={this.state.messages}></MessageList>
+                <ChatBar user="test" socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
             </div>
         )
     }
