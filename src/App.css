@@ -16,7 +16,17 @@
 
 .ph-silver::placeholder { color: silver }
 
+.ph-gray::placeholder { color: gray }
+
 .border-none { border: none }
+
+.bb-only { 
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-left-width: 0px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
 
 .App {
   height: 100vh;

@@ -15,17 +15,19 @@ class ChatBar extends React.Component {
     }
 
     handleButtonClick = () => {
-        const socket = this.props.socket;
-        const message = {
-            user: this.props.user,
-			text: this.state.value,
-			isUser: true,
-			image: "none",
-			date: new Date()
+        if (this.state.value){
+            const socket = this.props.socket;
+            const message = {
+                user: this.props.user,
+                text: this.state.value,
+                isUser: true,
+                image: "none",
+                date: new Date()
+            }
+            this.props.pushNewMessage(message);
+            socket.emit('message', message);
+            this.setState({value: ""});
         }
-        this.props.pushNewMessage(message);
-        socket.emit('message', message);
-        this.setState({value: ""});
     }
 
     render(){
