@@ -9,6 +9,7 @@ var mongoose = require('mongoose');
 var session = require('express-session')
 var MongoStorage = require('connect-mongo')(session);
 var apiRoute = require('./src/route/api');
+var authRoute = require('./src/route/auth')
 var Message = require('./src/model/Message');
 
 // mongodb
@@ -37,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', apiRoute);
+app.use('/auth', authRoute);
 
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'))
@@ -49,17 +51,18 @@ io.on('connection', function (socket) {
 	socket.on('login', function(obj) {
 		socket.id = obj.uid;
 		if(!onlineUsers.hasOwnProperty(obj.uid)) {
-			onlineUsers[obj.uid] = obj.username;
+			onlineUsers[obj.uid] = obj.name;
 			onlineCount++;
 		}
-		console.log(`${obj.username} has logged in.`);
+		console.log(`${obj.name} has logged in.`);
 	})
 
 	socket.on('disconnect', function() {
 		if(onlineUsers.hasOwnProperty(socket.id)){
+			console.log(`${onlineUsers[socket.id]} has logged out.`);
 			delete onlineUsers[socket.id];
 			onlineCount--;
-			console.log(`${obj.username} has logged out.`);
+			
 		}
 	})
 

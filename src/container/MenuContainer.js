@@ -19,7 +19,7 @@ class MenuContainer extends React.Component {
     render(){
         return (
             <React.Fragment>
-                {this.state.menuOpen && <Menu></Menu>}
+                {this.state.menuOpen && <Menu name={this.props.name} ></Menu>}
                 <MenuButton onClick={this.buttonOnClick}></MenuButton>
             </React.Fragment>
         )

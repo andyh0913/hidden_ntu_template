@@ -11,17 +11,35 @@ class Messengerpage extends React.Component {
             messages: [],
             socket: io()
         }
+
+        this.state.socket.on('message', (obj) => {
+            this.pushNewMessage(obj);
+        })
+
+        console.log(this.props);
         
-        fetch('/api/post?user=test')
+        fetch('/api/user')
+        .then(res => res.json())
+        .then(user => {
+            console.log(user);
+            if (user._id !== 'none'){
+                this.props.setUser(user);
+                this.state.socket.emit('login', user);
+            }
+            else{
+                window.alert('請先登入帳號！');
+                window.location='/login';
+            }
+        })
+    }
+
+    componentDidMount(){
+        fetch(`/api/message?user=${this.props.account}`)
         .then(res => res.json())
         .then(data => {
             this.setState({messages: data});
         })
         .catch(err => console.error(err));
-
-        this.state.socket.on('message', (obj) => {
-            this.pushNewMessage(obj);
-        })
     }
 
     pushNewMessage = (message) => {
@@ -41,7 +59,7 @@ class Messengerpage extends React.Component {
                     <h4 className="white f4 normal ml3">身分不明的研究員</h4>
                 </div>
                 <MessageList messages={this.state.messages}></MessageList>
-                <ChatBar user="test" socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
+                <ChatBar user={this.props.account} socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
             </div>
         )
     }
