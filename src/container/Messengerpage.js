@@ -25,21 +25,18 @@ class Messengerpage extends React.Component {
             if (user._id !== 'none'){
                 this.props.setUser(user);
                 this.state.socket.emit('login', user);
+                fetch(`/api/message?user=${user.account}`)
+                .then(res => res.json())
+                .then(data => {
+                    this.setState({messages: data});
+                })
+                .catch(err => console.error(err));
             }
             else{
                 window.alert('請先登入帳號！');
                 window.location='/login';
             }
         })
-    }
-
-    componentDidMount(){
-        fetch(`/api/message?user=${this.props.account}`)
-        .then(res => res.json())
-        .then(data => {
-            this.setState({messages: data});
-        })
-        .catch(err => console.error(err));
     }
 
     pushNewMessage = (message) => {
