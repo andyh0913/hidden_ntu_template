@@ -1,7 +1,14 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+// TODO 
+// save progress
+
 const MessageSchema = new Schema({
+    progress: {
+        type: Number,
+        required: true
+    },
     user: {
         type: String,
         required: true

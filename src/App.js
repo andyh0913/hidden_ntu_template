@@ -10,7 +10,7 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      uid: null,
+      _id: null,
       name: null,
       account: null,
       progress: null
