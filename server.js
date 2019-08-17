@@ -69,50 +69,55 @@ fs.createReadStream('reply.csv')
 .pipe(csv())
 .on('data', (data) => {
 	data.progress = parseInt(data.progress);
-	data.system = parseInt(data.system);
-	data.wait = parseInt(data.wait);
-	script.push(data);
+	reply.push(data);
 })
 .on('end', () => {
-	console.log(script);
-	console.log("Script loaded!");
+	console.log(reply);
+	console.log("Reply loaded!");
 })
 
-const sendSystemMessage = (socket, progress, user) => {
-	const message = script[progress];
-	var systemMessage = {
+const sendMessage = (socket, progress, user, content, isUser) => {
+	console.log(progress, user, content, isUser);
+	var newMessage = new Message({
 		progress: progress,
 		user: user,
-		text: message.content,
-		isUser: !message.system,
+		text: content,
+		isUser: isUser,
 		image: "none",
 		date: new Date()
-	}
-	newSystemMessage = new Message(systemMessage);
-	newSystemMessage.save().then( (message) => {
-		socket.emit('message', message)
+	});
+	newMessage.save().then( (message) => {
+		socket.emit('message', message);
 		User.findOne({account: user}, (err, user)=>{
 			if (err) console.log(err);
 			user.progress = progress;
-			user.save((err)=>{console.log(err)});
+			user.save().then((user)=>{
+				console.log(`Update progress: ${user.name}-${user.progress}`);
+			}, (err)=>{
+				console.log(err);
+			});
 		})
 	})
 }
 
 const waitAndSend = (socket, progress, user) => {
-	let timeout = script[progress].wait;
-	sendSystemMessage(socket, progress, user);
+	console.log(progress, user);
+	const message = script[progress];
+	console.log(message)
+	var timeout = message.wait;
+	sendMessage(socket, progress, user, message.content, !message.system);
 	if (timeout > 0){
 		setTimeout(() => {
 			waitAndSend(socket, progress + 1, user);
 		}, 1000 * timeout);
 	}
 	else if (timeout === 0){ // enable user input
-		socket.emit("enable")
+		socket.emit("enable", {progress: progress+1});
 	}
 }
 
 // socket.io
+// TODO: Change message user into _id
 var onlineUsers = {};
 var onlineCount = 0;
 io.on('connection', function (socket) {
@@ -126,8 +131,20 @@ io.on('connection', function (socket) {
 
 		// check progress and send message
 		if (script[obj.progress].wait > 0){
-			if(obj.progress === 0) waitAndSend(socket, obj.progress, obj.account);
-			else waitAndSend(socket, obj.progress+1, obj.account);
+			if(obj.progress === 0){
+				console.log("Initial progress")
+				waitAndSend(socket, obj.progress, obj.account);
+			}
+			else{
+				console.log("Continued progress");
+				waitAndSend(socket, obj.progress+1, obj.account);
+			}
+		}
+		else if(script[obj.progress].wait === 0){
+			socket.emit("enable", {progress: obj.progress+1});
+		}
+		else{
+			socket.emit("enable", {progress: obj.progress});
 		}
 	})
 
@@ -147,8 +164,20 @@ io.on('connection', function (socket) {
 			User.findOne({account: messageObj.user}, (err, user)=>{
 				if (err) console.log(err);
 				user.progress = messageObj.progress;
-				user.save((err)=>{console.log(err)});
+				user.save().then((user)=>{
+					console.log(`Update progress: ${user.name}-${user.progress}`);
+				}, (err)=>{
+					console.log(err);
+				});
 			})
+			var replyMessage = reply.find((x)=> x.progress=== messageObj.progress);
+			if (!replyMessage.answer||replyMessage.answer === messageObj.text){ // correct answer
+				socket.emit("disable", {progress: messageObj.progress+1});
+				waitAndSend(socket, messageObj.progress+1, messageObj.user);
+			}
+			else{ // wrong answer, send default reply
+				sendMessage(socket, messageObj.progress, messageObj.user, replyMessage.content, false);
+			}
 		})
 
 	})

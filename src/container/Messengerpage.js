@@ -10,11 +10,20 @@ class Messengerpage extends React.Component {
         this.state = {
             messages: [],
             socket: io(),
-            disabled: true
+            disabled: true,
+            progress: 0
         }
 
         this.state.socket.on('message', (obj) => {
             this.pushNewMessage(obj);
+        })
+
+        this.state.socket.on('enable', (obj) => {
+            this.setState({disabled: false, progress: obj.progress});
+        })
+
+        this.state.socket.on('disable', (obj) => {
+            this.setState({disabled: true, progress: obj.progress});
         })
 
         console.log(this.props);
@@ -57,7 +66,7 @@ class Messengerpage extends React.Component {
                     <h4 className="white f4 normal ml3">身分不明的研究員</h4>
                 </div>
                 <MessageList messages={this.state.messages}></MessageList>
-                <ChatBar disabled={this.state.disabled} user={this.props.account} socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
+                <ChatBar disabled={this.state.disabled} progress={this.state.progress} user={this.props.account} socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
             </div>
         )
     }

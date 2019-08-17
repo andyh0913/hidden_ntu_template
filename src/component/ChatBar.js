@@ -18,6 +18,7 @@ class ChatBar extends React.Component {
         if (this.state.value){
             const socket = this.props.socket;
             const message = {
+                progress: this.props.progress,
                 user: this.props.user,
                 text: this.state.value,
                 isUser: true,
