@@ -33,7 +33,9 @@ class ChatBar extends React.Component {
     render(){
         return (
             <div className="w-100 h--5 bg-black o-80 flex-shrink-0 flex flex-row ph4 justify-start items-center">
-                <input type="text" value={this.state.value} onChange={this.handleChange} placeholder="說點什麼吧..." className="br-pill h2 ph2 bg-gray ba b--gray ph-silver white flex-grow-1 fw2"/>
+                <input type="text" disabled={this.props.disabled} value={this.state.value} onChange={this.handleChange} 
+                    placeholder={this.props.disabled?"現在無法使用此功能":"說點什麼吧..."}
+                    className={`br-pill h2 ph2 bn ph-silver white flex-grow-1 fw2 ${this.props.disabled?"bg-dark-gray":"bg-gray"}`}/>
                 <div id="chatButton" className="bg-transparent h2 w2 border-none ml3 grow flex-shrink-0"
                 onClick={this.handleButtonClick}></div>
             </div>

@@ -9,7 +9,8 @@ class Messengerpage extends React.Component {
         super(props);
         this.state = {
             messages: [],
-            socket: io()
+            socket: io(),
+            disabled: true
         }
 
         this.state.socket.on('message', (obj) => {
@@ -56,7 +57,7 @@ class Messengerpage extends React.Component {
                     <h4 className="white f4 normal ml3">身分不明的研究員</h4>
                 </div>
                 <MessageList messages={this.state.messages}></MessageList>
-                <ChatBar user={this.props.account} socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
+                <ChatBar disabled={this.state.disabled} user={this.props.account} socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
             </div>
         )
     }

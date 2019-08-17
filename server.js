@@ -45,13 +45,27 @@ app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
-// script.csv
+// load script.csv and reply.csv
 const fs = require('fs');
 const csv = require('csv-parser');
 
 const script = [];
-const csvfile = 'test.csv';
-fs.createReadStream(csvfile)
+const reply = [];
+
+fs.createReadStream('script.csv')
+.pipe(csv())
+.on('data', (data) => {
+	data.progress = parseInt(data.progress);
+	data.system = parseInt(data.system);
+	data.wait = parseInt(data.wait);
+	script.push(data);
+})
+.on('end', () => {
+	console.log(script);
+	console.log("Script loaded!");
+})
+
+fs.createReadStream('reply.csv')
 .pipe(csv())
 .on('data', (data) => {
 	data.progress = parseInt(data.progress);
@@ -93,6 +107,9 @@ const waitAndSend = (socket, progress, user) => {
 			waitAndSend(socket, progress + 1, user);
 		}, 1000 * timeout);
 	}
+	else if (timeout === 0){ // enable user input
+		socket.emit("enable")
+	}
 }
 
 // socket.io
@@ -109,9 +126,9 @@ io.on('connection', function (socket) {
 
 		// check progress and send message
 		if (script[obj.progress].wait > 0){
-			waitAndSend(socket, obj.progress+1, obj.account);
+			if(obj.progress === 0) waitAndSend(socket, obj.progress, obj.account);
+			else waitAndSend(socket, obj.progress+1, obj.account);
 		}
-		
 	})
 
 	socket.on('disconnect', function() {
