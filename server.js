@@ -83,7 +83,7 @@ const sendMessage = (socket, progress, user, content, isUser) => {
 		user: user,
 		text: content,
 		isUser: isUser,
-		image: "none",
+		isImage: content[0]==='/',
 		date: new Date()
 	});
 	newMessage.save().then( (message) => {

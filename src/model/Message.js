@@ -21,8 +21,8 @@ const MessageSchema = new Schema({
         type: Boolean,
         required: true
     },
-    image: {
-        type: String,
+    isImage: {
+        type: Boolean,
         required: true
     },
     date: {

@@ -22,7 +22,7 @@ class ChatBar extends React.Component {
                 user: this.props.user,
                 text: this.state.value,
                 isUser: true,
-                image: "none",
+                isImage: false,
                 date: new Date()
             }
             this.props.pushNewMessage(message);
