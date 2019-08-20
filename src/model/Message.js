@@ -17,8 +17,8 @@ const MessageSchema = new Schema({
         type: String,
         required: true
     },
-    isUser: {
-        type: Boolean,
+    speaker: { // 0 for user, 1 for AI, 2 for system message
+        type: Number,
         required: true
     },
     isImage: {

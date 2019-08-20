@@ -56,7 +56,7 @@ fs.createReadStream('script.csv')
 .pipe(csv())
 .on('data', (data) => {
 	data.progress = parseInt(data.progress);
-	data.system = parseInt(data.system);
+	data.speaker = parseInt(data.speaker);
 	data.wait = parseInt(data.wait);
 	script.push(data);
 })
@@ -69,6 +69,7 @@ fs.createReadStream('reply.csv')
 .pipe(csv())
 .on('data', (data) => {
 	data.progress = parseInt(data.progress);
+	data.speaker = parseInt(data.speaker);
 	reply.push(data);
 })
 .on('end', () => {
@@ -76,13 +77,13 @@ fs.createReadStream('reply.csv')
 	console.log("Reply loaded!");
 })
 
-const sendMessage = (socket, progress, user, content, isUser) => {
-	console.log(progress, user, content, isUser);
+const sendMessage = (socket, progress, user, content, speaker) => {
+	console.log(progress, user, content, speaker);
 	var newMessage = new Message({
 		progress: progress,
 		user: user,
 		text: content,
-		isUser: isUser,
+		speaker: speaker,
 		isImage: content[0]==='/',
 		date: new Date()
 	});
@@ -101,11 +102,12 @@ const sendMessage = (socket, progress, user, content, isUser) => {
 }
 
 const waitAndSend = (socket, progress, user) => {
+	if(!onlineUsers.hasOwnProperty(socket.id)) return; // stop sending message
 	console.log(progress, user);
 	const message = script[progress];
 	console.log(message)
 	var timeout = message.wait;
-	sendMessage(socket, progress, user, message.content, !message.system);
+	sendMessage(socket, progress, user, message.content, message.speaker);
 	if (timeout > 0){
 		setTimeout(() => {
 			waitAndSend(socket, progress + 1, user);
@@ -176,7 +178,7 @@ io.on('connection', function (socket) {
 				waitAndSend(socket, messageObj.progress+1, messageObj.user);
 			}
 			else{ // wrong answer, send default reply
-				sendMessage(socket, messageObj.progress, messageObj.user, replyMessage.content, false);
+				sendMessage(socket, messageObj.progress, messageObj.user, replyMessage.content, replyMessage.speaker);
 			}
 		})
 

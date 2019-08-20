@@ -21,7 +21,7 @@ class ChatBar extends React.Component {
                 progress: this.props.progress,
                 user: this.props.user,
                 text: this.state.value,
-                isUser: true,
+                speaker: 0,
                 isImage: false,
                 date: new Date()
             }
