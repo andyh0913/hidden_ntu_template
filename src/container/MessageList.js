@@ -5,7 +5,7 @@ const MessageList = (props) => {
     const messagesEndRef = useRef(null);
     const scrollToBottom = () => {
         console.log("scrollToBottom");
-        messagesEndRef.current.scrollIntoView({behavior: "smooth"});
+        messagesEndRef.current.scrollIntoView({/*behavior: "smooth"*/});
     }
     useEffect(scrollToBottom, [props.messages])
     const messages = props.messages;

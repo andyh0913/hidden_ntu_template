@@ -63,6 +63,8 @@ fs.createReadStream('script.csv')
 .on('end', () => {
 	console.log(script);
 	console.log("Script loaded!");
+	console.log("script[90]");
+	console.log(script[90]);
 })
 
 fs.createReadStream('reply.csv')
