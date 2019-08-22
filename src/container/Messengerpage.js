@@ -10,8 +10,7 @@ class Messengerpage extends React.Component {
         this.state = {
             messages: [],
             socket: io(),
-            disabled: true,
-            progress: 0
+            disabled: true
         }
 
         this.state.socket.on('message', (obj) => {
@@ -19,27 +18,36 @@ class Messengerpage extends React.Component {
         })
 
         this.state.socket.on('enable', (obj) => {
-            this.setState({disabled: false, progress: obj.progress});
+            this.setState({disabled: false});
+            this.props.setProgress(obj.progress);
         })
 
         this.state.socket.on('disable', (obj) => {
-            this.setState({disabled: true, progress: obj.progress});
+            this.setState({disabled: true});
+            this.props.setProgress(obj.progress);
         })
 
         setInterval(() => {
             if (!this.state.socket.connected){
                 const newSocket = io();
                 this.setState({socket: newSocket});
-                
+                const user = {
+                    _id: this.props._id,
+                    account: this.props.account,
+                    progress: this.props.progress,
+                    name: this.props.name
+                }
                 newSocket.emit('login', user);
                 newSocket.on('message', (obj) => {
                     this.pushNewMessage(obj);
                 })
                 newSocket.on('enable', (obj) => {
-                    this.setState({disabled: false, progress: obj.progress});
+                    this.setState({disabled: false});
+                    this.props.setProgress(obj.progress);
                 })
                 newSocket.on('disable', (obj) => {
-                    this.setState({disabled: true, progress: obj.progress});
+                    this.setState({disabled: true});
+                    this.props.setProgress(obj.progress);
                 })
             }
         },500);
@@ -84,7 +92,7 @@ class Messengerpage extends React.Component {
                     <h4 className="white f4 normal ml3">身分不明的研究員</h4>
                 </div>
                 <MessageList messages={this.state.messages}></MessageList>
-                <ChatBar disabled={this.state.disabled} progress={this.state.progress} user={this.props.account} socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
+                <ChatBar disabled={this.state.disabled} progress={this.props.progress} user={this.props.account} socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
             </div>
         )
     }
