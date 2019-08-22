@@ -27,7 +27,20 @@ class Messengerpage extends React.Component {
         })
 
         setInterval(() => {
-            if (!this.state.socket.connected) this.setState({socket: io()});
+            if (!this.state.socket.connected){
+                const newSocket = io();
+                this.setState({socket: newSocket});
+
+                newSocket.on('message', (obj) => {
+                    this.pushNewMessage(obj);
+                })
+                newSocket.on('enable', (obj) => {
+                    this.setState({disabled: false, progress: obj.progress});
+                })
+                newSocket.on('disable', (obj) => {
+                    this.setState({disabled: true, progress: obj.progress});
+                })
+            }
         },500);
 
         console.log(this.props);
