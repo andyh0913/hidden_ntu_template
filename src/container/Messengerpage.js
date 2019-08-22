@@ -30,7 +30,8 @@ class Messengerpage extends React.Component {
             if (!this.state.socket.connected){
                 const newSocket = io();
                 this.setState({socket: newSocket});
-
+                
+                newSocket.emit('login', user);
                 newSocket.on('message', (obj) => {
                     this.pushNewMessage(obj);
                 })
