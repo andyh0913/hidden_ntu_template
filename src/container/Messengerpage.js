@@ -26,6 +26,10 @@ class Messengerpage extends React.Component {
             this.setState({disabled: true, progress: obj.progress});
         })
 
+        setInterval(() => {
+            if (!this.state.socket.connected) this.setState({socket: io()});
+        },500);
+
         console.log(this.props);
         
         fetch('/api/user')
