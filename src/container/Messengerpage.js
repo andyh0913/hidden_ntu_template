@@ -76,8 +76,8 @@ class Messengerpage extends React.Component {
                 .catch(err => console.error(err));
             }
             else{
-                // window.alert('請先登入帳號！');
-                // window.location='/login';
+                window.alert('請先登入帳號！');
+                window.location='/login';
             }
         })
     }
