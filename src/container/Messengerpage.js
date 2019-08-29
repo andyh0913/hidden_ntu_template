@@ -57,7 +57,7 @@ class Messengerpage extends React.Component {
                     this.setState(obj);
                 })
             }
-        },500);
+        },1000);
 
         console.log(this.props);
         
