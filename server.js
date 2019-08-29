@@ -107,7 +107,6 @@ const waitAndSend = (socket, progress, user) => {
 	if(!onlineUsers.hasOwnProperty(socket.id)) return; // stop sending message
 	console.log(progress, user);
 	const message = script[progress];
-	console.log(message)
 	var timeout = message.wait;
 	sendMessage(socket, progress, user, message.content, message.speaker);
 	setSender(socket, progress);
