@@ -63,8 +63,6 @@ fs.createReadStream('script.csv')
 .on('end', () => {
 	console.log(script);
 	console.log("Script loaded!");
-	console.log("script[90]");
-	console.log(script[90]);
 })
 
 fs.createReadStream('reply.csv')
@@ -105,7 +103,6 @@ const sendMessage = (socket, progress, user, content, speaker) => {
 
 const waitAndSend = (socket, progress, user) => {
 	if(!onlineUsers.hasOwnProperty(socket.id)) return; // stop sending message
-	console.log(progress, user);
 	const message = script[progress];
 	var timeout = message.wait;
 	sendMessage(socket, progress, user, message.content, message.speaker);

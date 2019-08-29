@@ -17,6 +17,7 @@ class Messengerpage extends React.Component {
 
         this.state.socket.on('message', (obj) => {
             this.pushNewMessage(obj);
+            this.props.setProgress(obj.progress);
         })
         this.state.socket.on('enable', (obj) => {
             this.setState({disabled: false});
