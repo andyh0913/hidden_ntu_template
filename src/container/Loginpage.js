@@ -4,7 +4,7 @@ class Loginpage extends React.Component {
     render(){
         return (
             <div className="flex flex-column justify-center items-center w-100 h-100 bg-light-gray">
-                <div className="img-container mw4 mh4">
+                <div className="w4 h4">
                     <img alt="" className="br-100" src="/images/logo.png"></img>
                 </div>
                 <h1 className="black">帳號登入</h1>

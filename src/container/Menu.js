@@ -6,7 +6,7 @@ const Menu = (props) => {
     return(
         <div className="fixed flex flex-column bg-near-white w-100 h-100 fadein-1 pa3 z-1">
             <div className="flex flex-column items-center justify-end bb b--silver">
-                <div className="img-container mw4 mh4">
+                <div className="h4 w4">
                     <img alt="" className="br-100" src="/images/logo.png"></img>
                 </div>
                 <h1 className="black f2">台大躲貓貓社</h1>

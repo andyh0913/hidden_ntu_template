@@ -110,6 +110,7 @@ const waitAndSend = (socket, progress, user) => {
 	console.log(message)
 	var timeout = message.wait;
 	sendMessage(socket, progress, user, message.content, message.speaker);
+	setSender(socket, progress);
 	if (timeout > 0){
 		setTimeout(() => {
 			waitAndSend(socket, progress + 1, user);
@@ -119,6 +120,18 @@ const waitAndSend = (socket, progress, user) => {
 		socket.emit("enable", {progress: progress+1});
 	}
 }
+
+const setSender = (socket, progress) => {
+	let isGroup = progress<=158?false:true;
+	let name = "";
+	if (progress<=9) name = "不明人士";
+	else if (progress<=158) name = "漢森‧丹尼斯";
+	else if (progress<=162) name = "漢森‧丹尼斯、不明人士";
+	else name = "漢森‧丹尼斯、喬伊";
+	socket.emit('setSender', {senderName: name, isGroup: isGroup})
+}
+
+		
 
 // socket.io
 // TODO: Change message user into _id
@@ -150,6 +163,8 @@ io.on('connection', function (socket) {
 		else{
 			socket.emit("enable", {progress: obj.progress});
 		}
+		// check progress and set sender name and icon
+		setSender(socket, obj.progress);
 	})
 
 	socket.on('disconnect', function() {

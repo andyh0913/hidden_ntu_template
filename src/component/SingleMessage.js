@@ -1,6 +1,11 @@
 import React from 'react'
 import '../App.css'
 
+// speaker:
+// 0: user
+// 1: 漢森‧丹尼斯
+// 2: 系統訊息
+
 const backslash2br = (text) => {
     return text.split('\\').map((item, key) => {
         return <span key={key}>{item}<br/></span>

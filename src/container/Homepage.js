@@ -6,12 +6,12 @@ class Homepage extends React.Component{
         return (
             <React.Fragment>
                 <div className="h-100 flex justify-center">
-                    <div className="img-container mw7 mh7">
-                        <img alt="" src="/images/logo.png"></img>
+                    <div>
+                        <img className="" alt="" src="/images/logo.png"></img>
                     </div>
                 </div>
                 <div className="h-100 flex flex-column justify-start items-center bg-self-green">
-                    <div className="img-container pt4">
+                    <div className="pt4">
                         <img alt="" className="shadow-5" src="/images/activity.png"></img>
                     </div>
                     <h1 className="f1 white text-shadow">社博實境解謎</h1>
