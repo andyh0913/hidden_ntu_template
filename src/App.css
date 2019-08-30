@@ -12,6 +12,10 @@
 
 .w--3 { width: 3rem }
 
+.vw-100 { width: 100vw }
+
+.vh-100 { height: 100vh }
+
 .justify-evenly { justify-content: space-evenly }
 
 .no-focus-outline:focus { outline: none }
@@ -41,6 +45,33 @@
 @keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
+}
+
+@-webkit-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.scale-big-1 {
+  animation: scale-big 1s;
+}
+
+@keyframes scale-big {
+  from {
+    transform: scale(0,0);
+  }
+  to {
+    transform: scale(1,1);
+  }
+}
+
+@-webkit-keyframes scale-big {
+  from {
+    transform: scale(0,0);
+  }
+  to {
+    transform: scale(1,1);
+  }
 }
 
 #chatButton {

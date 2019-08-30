@@ -9,7 +9,7 @@ const MessageList = (props) => {
     }
     useEffect(scrollToBottom, [props.messages])
     const messages = props.messages;
-    const messageDoms = messages.map( x => <SingleMessage {...x}></SingleMessage> )
+    const messageDoms = messages.map( x => <SingleMessage {...x} setImageUrl={props.setImageUrl}></SingleMessage> )
     return (
         <div id="messageList" className="w-100 flex-grow-1 overflow-auto white ph4 flex flex-column justify-start">
             {messageDoms}

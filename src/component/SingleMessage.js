@@ -12,10 +12,10 @@ const backslash2br = (text) => {
     })
 }
 
-const displayImage = (url) => {
+const displayImage = (url, setImageUrl) => {
     return (
         <div className="img-container mw4 mh4">
-            <img alt="" src={url}></img>
+            <img alt="" src={url} onClick={()=>{setImageUrl(url)}}></img>
         </div>
     )
 }
@@ -31,7 +31,7 @@ const SingleMessage = (props) => {
     else{
         return (
             <div className={`white normal mw5 br3 f5 pa2 ma1 tl ${props.speaker===0?"bg-blue self-end":"bg-gray self-start"}`}>
-                {props.isImage?displayImage(props.text):backslash2br(props.text)}
+                {props.isImage?displayImage(props.text, props.setImageUrl):backslash2br(props.text)}
             </div>
         )
     }
