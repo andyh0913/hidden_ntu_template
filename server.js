@@ -176,25 +176,26 @@ io.on('connection', function (socket) {
 	socket.on('message', function(messageObj) {
 		var newMessage = new Message(messageObj);
 		newMessage.save().then( (message) => {
-			console.log("Message saved");
-			User.findOne({account: messageObj.user}, (err, user)=>{
+			console.log(`Message-${message.progress} saved`);
+			User.findOne({account: message.user}, (err, user)=>{
 				if (err) console.log(err);
-				user.progress = messageObj.progress;
+				user.progress = message.progress;
 				user.save().then((user)=>{
 					console.log(`Update progress: ${user.name}-${user.progress}`);
 				}, (err)=>{
 					console.log(err);
 				});
 			})
-			var replyMessage = reply.find((x)=> x.progress=== messageObj.progress);
-			if (!replyMessage.answer||replyMessage.answer === messageObj.text){ // correct answer
-				socket.emit("disable", {progress: messageObj.progress+1});
-				waitAndSend(socket, messageObj.progress+1, messageObj.user);
+			var replyMessage = reply.find((x)=> x.progress=== message.progress);
+			if (!replyMessage.answer||replyMessage.answer === message.text){ // correct answer
+				socket.emit("disable", {progress: message.progress+1});
+				waitAndSend(socket, message.progress+1, message.user);
 			}
 			else{ // wrong answer, send default reply
-				sendMessage(socket, messageObj.progress, messageObj.user, replyMessage.content, replyMessage.speaker);
+				sendMessage(socket, message.progress, message.user, replyMessage.content, replyMessage.speaker);
 			}
 		})
+		.catch((err)=>{console.log(err)})
 
 	})
 })
