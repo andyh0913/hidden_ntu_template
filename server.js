@@ -135,32 +135,34 @@ var onlineUsers = {};
 var onlineCount = 0;
 io.on('connection', function (socket) {
 	socket.on('login', function(obj) {
-		socket.id = obj._id;
-		if(!onlineUsers.hasOwnProperty(obj._id)) {
+		if(onlineUsers.hasOwnProperty(obj._id)) {
+			socket.disconnect();
+		}
+		else {
+			socket.id = obj._id;
 			onlineUsers[obj._id] = obj.name;
 			onlineCount++;
-		}
-		console.log(`${obj.name} has logged in.`);
-
-		// check progress and send message
-		if (script[obj.progress].wait > 0){
-			if(obj.progress === 0){
-				console.log("Initial progress")
-				waitAndSend(socket, obj.progress, obj.account);
+			console.log(`${obj.name} has logged in.`);
+			// check progress and send message
+			if (script[obj.progress].wait > 0){
+				if(obj.progress === 0){
+					console.log("Initial progress")
+					waitAndSend(socket, obj.progress, obj.account);
+				}
+				else{
+					console.log("Continued progress");
+					waitAndSend(socket, obj.progress+1, obj.account);
+				}
+			}
+			else if(script[obj.progress].wait === 0){
+				socket.emit("enable", {progress: obj.progress+1});
 			}
 			else{
-				console.log("Continued progress");
-				waitAndSend(socket, obj.progress+1, obj.account);
+				socket.emit("enable", {progress: obj.progress});
 			}
+			// check progress and set sender name and icon
+			setSender(socket, obj.progress);
 		}
-		else if(script[obj.progress].wait === 0){
-			socket.emit("enable", {progress: obj.progress+1});
-		}
-		else{
-			socket.emit("enable", {progress: obj.progress});
-		}
-		// check progress and set sender name and icon
-		setSender(socket, obj.progress);
 	})
 
 	socket.on('disconnect', function() {
@@ -168,7 +170,6 @@ io.on('connection', function (socket) {
 			console.log(`${onlineUsers[socket.id]} has logged out.`);
 			delete onlineUsers[socket.id];
 			onlineCount--;
-			
 		}
 	})
 

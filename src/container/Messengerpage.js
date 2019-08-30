@@ -112,7 +112,11 @@ class Messengerpage extends React.Component {
     render(){
         return (
             <div className="fixed flex flex-column justify-between w-100 h-100 bg-black">
-                {!this.state.largeImageUrl?null:<div className="fixed vw-100 vh-100 z-3 flex scale-big-1 justify-center items-center" onClick={()=>{this.setImageUrl("")}}><img alt="" src={this.state.largeImageUrl} ></img></div>}
+                {!this.state.largeImageUrl?null
+                :<div className="fixed vw-100 vh-100 z-3 flex scale-big-1 justify-center items-center bg-black" 
+                    onClick={()=>{this.setImageUrl("")}}>
+                    <img alt="" src={this.state.largeImageUrl} ></img>
+                </div>}
                 <div className="flex-shrink-0 w-100 h4 bg-black o-80 flex flex-row justify-start items-center pa3">
                     <div className="w3 h3 relative">
                         {
