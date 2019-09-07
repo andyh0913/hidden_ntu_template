@@ -17,7 +17,7 @@ const MessageSchema = new Schema({
         type: String,
         required: true
     },
-    speaker: { // 0 for user, 1 for AI, 2 for system message
+    speaker: { // 0 for user, 1 for Dennis, 2 for system message, 3 for Joey
         type: Number,
         required: true
     },

@@ -18,6 +18,10 @@ const UserSchema = new Schema({
         type: Number,
         default: 0,
         required: true
+    },
+    rfid: {
+        typs: String,
+        default: ''
     }
 });
 

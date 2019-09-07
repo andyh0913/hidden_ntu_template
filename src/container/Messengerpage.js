@@ -31,6 +31,9 @@ class Messengerpage extends React.Component {
         this.state.socket.on('setSender', (obj) => {
             this.setState(obj);
         })
+        this.state.socket.on('test', (obj)=>{
+            console.log(obj);
+        })
 
         setInterval(() => {
             if (!this.state.socket.connected){

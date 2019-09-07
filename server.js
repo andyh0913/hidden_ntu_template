@@ -127,8 +127,6 @@ const setSender = (socket, progress) => {
 	socket.emit('setSender', {senderName: name, isGroup: isGroup})
 }
 
-		
-
 // socket.io
 // TODO: Change message user into _id
 var onlineUsers = {};
@@ -139,6 +137,7 @@ io.on('connection', function (socket) {
 			socket.disconnect();
 		}
 		else {
+			socket.join(obj._id)
 			socket.id = obj._id;
 			onlineUsers[obj._id] = obj.name;
 			onlineCount++;
@@ -198,6 +197,12 @@ io.on('connection', function (socket) {
 		.catch((err)=>{console.log(err)})
 
 	})
+
+	// for dns-server
+	// socket.on('rfid', function(obj){
+	// 	//obj = user: user._id, point: point}
+	// 	io.to(obj._id).emit()
+	// })
 })
 
 server.listen(port , () => console.log('Listening on port ' + port))

@@ -33,7 +33,10 @@ class App extends React.Component {
   }
 
   setProgress = (p) => {
-    this.setState({progress: p});
+    if (p > this.state.progress){
+      console.log("setProgress:", p);
+      this.setState({progress: p});
+    }
   }
 
   render(){

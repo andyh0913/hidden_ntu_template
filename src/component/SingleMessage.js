@@ -5,6 +5,11 @@ import '../App.css'
 // 0: user
 // 1: 漢森‧丹尼斯
 // 2: 系統訊息
+// 3: 喬伊
+const speaker = {
+    1: '丹尼斯',
+    3: '喬伊'
+}
 
 const backslash2br = (text) => {
     return text.split('\\').map((item, key) => {
@@ -24,14 +29,17 @@ const SingleMessage = (props) => {
     if (props.speaker===2){
         return (
             <div className="red normal mw5 br3 f5 pa2 ma1 tc self-center">
-                {props.isImage?displayImage(props.text):backslash2br(props.text)}
+                {props.isImage?displayImage(props.text, props.setImageUrl):backslash2br(props.text)}
             </div>
         )
     }
     else{
         return (
-            <div className={`white normal mw5 br3 f5 pa2 ma1 tl ${props.speaker===0?"bg-blue self-end":"bg-gray self-start"}`}>
-                {props.isImage?displayImage(props.text, props.setImageUrl):backslash2br(props.text)}
+            <div className="flex flex-column items-start">
+                {speaker[props.speaker]?<p className="silver f6 ml3 mb0">{speaker[props.speaker]}</p>:null}
+                <div className={`white normal mw5 br3 f5 pa2 ma1 tl ${props.speaker===0?"bg-blue self-end":"bg-gray self-start"}`}>
+                    {props.isImage?displayImage(props.text, props.setImageUrl):backslash2br(props.text)}
+                </div>
             </div>
         )
     }
