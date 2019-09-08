@@ -7,16 +7,16 @@ mongoose.Promise = global.Promise;
 mongoURL = "mongodb+srv://hiddenntu:hiddenntu@cluster0-wjufh.mongodb.net/test?retryWrites=true&w=majority"
 mongoose.connect(mongoURL, {useNewUrlParser: true});
 
-var named = require('named');
+var named = require('node-named');
 
 const winston = require('winston');
 const wcf = require('winston-console-formatter');
-const logger = new winston.Logger({
+const logger = winston.createLogger({
   level: 'silly'
 });
 const { formatter, timestamp } = wcf();
 
-logger.add(winston.transports.Console, { formatter, timestamp });
+logger.add(new winston.transports.Console, { formatter, timestamp });
 
 var server = named.createServer();
 var ttl = 5;
@@ -34,7 +34,7 @@ const point2progress = {
 
 async function trigPoint(card, point) {
     user = await User.findOne({rfid: card}).exec()
-    if (point2progress[user.point] !== user.progress) throw 'wrong progress'
+    if (point2progress[point] !== user.progress) throw 'wrong progress'
     socket.emit('rfid', {
         user: user._id,
         progress: progress
