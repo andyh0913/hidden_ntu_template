@@ -73,7 +73,7 @@ class Messengerpage extends React.Component {
             if (user._id !== 'none'){
                 this.props.setUser(user);
                 this.state.socket.emit('login', user);
-                fetch(`/api/message?user=${user.account}`)
+                fetch(`/api/message?user=${user._id}`)
                 .then(res => res.json())
                 .then(data => {
                     this.setState({messages: data});
@@ -139,7 +139,7 @@ class Messengerpage extends React.Component {
                     <h4 className="white f4 normal ml3">{this.state.senderName}</h4>
                 </div>
                 <MessageList messages={this.state.messages} setImageUrl={this.setImageUrl} ></MessageList>
-                <ChatBar disabled={this.state.disabled} progress={this.props.progress} user={this.props.account} socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
+                <ChatBar disabled={this.state.disabled} progress={this.props.progress} user={this.props._id} socket={this.state.socket} pushNewMessage={this.pushNewMessage}></ChatBar>
             </div>
         )
     }

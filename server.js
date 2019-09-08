@@ -77,19 +77,19 @@ fs.createReadStream('reply.csv')
 	console.log("Reply loaded!");
 })
 
-const sendMessage = (socket, progress, user, content, speaker) => {
-	console.log(progress, user, content, speaker);
+const sendMessage = (id, progress, content, speaker) => {
+	console.log(progress, onlineUsers[id], content, speaker);
 	var newMessage = new Message({
 		progress: progress,
-		user: user,
+		user: id,
 		text: content,
 		speaker: speaker,
 		isImage: content[0]==='/',
 		date: new Date()
 	});
 	newMessage.save().then( (message) => {
-		socket.emit('message', message);
-		User.findOne({account: user}, (err, user)=>{
+		io.to(id).emit('message', message);
+		User.findById(id, (err, user)=>{
 			if (err) console.log(err);
 			user.progress = progress;
 			user.save().then((user)=>{
@@ -101,30 +101,30 @@ const sendMessage = (socket, progress, user, content, speaker) => {
 	})
 }
 
-const waitAndSend = (socket, progress, user) => {
-	if(!onlineUsers.hasOwnProperty(socket.id)) return; // stop sending message
+const waitAndSend = (id, progress) => {
+	if(!onlineUsers.hasOwnProperty(id)) return; // stop sending message
 	const message = script[progress];
 	var timeout = message.wait;
-	sendMessage(socket, progress, user, message.content, message.speaker);
-	setSender(socket, progress);
+	sendMessage(id, progress, message.content, message.speaker);
+	setSender(id, progress);
 	if (timeout > 0){
 		setTimeout(() => {
-			waitAndSend(socket, progress + 1, user);
+			waitAndSend(id, progress + 1);
 		}, 1000 * timeout);
 	}
 	else if (timeout === 0){ // enable user input
-		socket.emit("enable", {progress: progress+1});
+		io.to(id).emit("enable", {progress: progress+1});
 	}
 }
 
-const setSender = (socket, progress) => {
+const setSender = (id, progress) => {
 	let isGroup = progress<=158?false:true;
 	let name = "";
 	if (progress<=9) name = "不明人士";
 	else if (progress<=158) name = "漢森‧丹尼斯";
 	else if (progress<=162) name = "漢森‧丹尼斯、不明人士";
 	else name = "漢森‧丹尼斯、喬伊";
-	socket.emit('setSender', {senderName: name, isGroup: isGroup})
+	io.to(id).emit('setSender', {senderName: name, isGroup: isGroup})
 }
 
 // socket.io
@@ -134,7 +134,9 @@ var onlineCount = 0;
 io.on('connection', function (socket) {
 	socket.on('login', function(obj) {
 		if(onlineUsers.hasOwnProperty(obj._id)) {
+			console.log('Delete extra socket')
 			socket.disconnect();
+			return;
 		}
 		else {
 			socket.join(obj._id)
@@ -146,11 +148,11 @@ io.on('connection', function (socket) {
 			if (script[obj.progress].wait > 0){
 				if(obj.progress === 0){
 					console.log("Initial progress")
-					waitAndSend(socket, obj.progress, obj.account);
+					waitAndSend(obj._id, obj.progress);
 				}
 				else{
 					console.log("Continued progress");
-					waitAndSend(socket, obj.progress+1, obj.account);
+					waitAndSend(obj._id, obj.progress+1);
 				}
 			}
 			else if(script[obj.progress].wait === 0){
@@ -160,12 +162,13 @@ io.on('connection', function (socket) {
 				socket.emit("enable", {progress: obj.progress});
 			}
 			// check progress and set sender name and icon
-			setSender(socket, obj.progress);
+			setSender(obj._id, obj.progress);
 		}
 	})
 
 	socket.on('disconnect', function() {
 		if(onlineUsers.hasOwnProperty(socket.id)){
+			socket.leave(socket.id)
 			console.log(`${onlineUsers[socket.id]} has logged out.`);
 			delete onlineUsers[socket.id];
 			onlineCount--;
@@ -176,7 +179,7 @@ io.on('connection', function (socket) {
 		var newMessage = new Message(messageObj);
 		newMessage.save().then( (message) => {
 			console.log(`Message-${message.progress} saved`);
-			User.findOne({account: message.user}, (err, user)=>{
+			User.findById(message.user, (err, user)=>{
 				if (err) console.log(err);
 				user.progress = message.progress;
 				user.save().then((user)=>{
@@ -188,10 +191,10 @@ io.on('connection', function (socket) {
 			var replyMessage = reply.find((x)=> x.progress=== message.progress);
 			if (!replyMessage.answer||replyMessage.answer === message.text){ // correct answer
 				socket.emit("disable", {progress: message.progress+1});
-				waitAndSend(socket, message.progress+1, message.user);
+				waitAndSend(message.user, message.progress+1, message.user);
 			}
 			else{ // wrong answer, send default reply
-				sendMessage(socket, message.progress, message.user, replyMessage.content, replyMessage.speaker);
+				sendMessage(message.user, message.progress, replyMessage.content, replyMessage.speaker);
 			}
 		})
 		.catch((err)=>{console.log(err)})
