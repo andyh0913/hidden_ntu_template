@@ -35,12 +35,10 @@ const SingleMessage = (props) => {
     }
     else{
         return (
-            <div className="flex flex-column items-start">
-                {speaker[props.speaker]?<p className="silver f6 ml3 mb0">{speaker[props.speaker]}</p>:null}
+           
                 <div className={`white normal mw5 br3 f5 pa2 ma1 tl ${props.speaker===0?"bg-blue self-end":"bg-gray self-start"}`}>
                     {props.isImage?displayImage(props.text, props.setImageUrl):backslash2br(props.text)}
                 </div>
-            </div>
         )
     }
 }
