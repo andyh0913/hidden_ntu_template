@@ -73,7 +73,7 @@ server.on('query', (query) => {
                     var point = q.split(',')[2];
                     trigPoint(card, point)
                     .then((user) => {
-                        console.log('Trigger', user)
+                        logger.log('info', 'User %s trigger point.', user.name)
                         query.addAnswer(domain, okAns, ttl);
                         server.send(query);
                     })
