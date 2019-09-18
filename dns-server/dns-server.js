@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const User = require('../src/model/User')
 
-var socket = require('socket.io-client')('https://hiddenntu2019.herokuapp.com')
+var socket = require('socket.io-client')('https://hiddenntu2019test.herokuapp.com')
 
 mongoose.Promise = global.Promise;
 mongoURL = "mongodb+srv://hiddenntu:hiddenntu@cluster0-wjufh.mongodb.net/test?retryWrites=true&w=majority"

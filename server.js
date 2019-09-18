@@ -191,7 +191,7 @@ io.on('connection', function (socket) {
 			var replyMessage = reply.find((x)=> x.progress=== message.progress);
 			if (!replyMessage.answer||replyMessage.answer === message.text){ // correct answer
 				socket.emit("disable", {progress: message.progress+1});
-				waitAndSend(message.user, message.progress+1, message.user);
+				waitAndSend(message.user, message.progress+1);
 			}
 			else{ // wrong answer, send default reply
 				sendMessage(message.user, message.progress, replyMessage.content, replyMessage.speaker);
@@ -202,10 +202,10 @@ io.on('connection', function (socket) {
 	})
 
 	// for dns-server
-	// socket.on('rfid', function(obj){
-	// 	//obj = user: user._id, point: point}
-	// 	io.to(obj._id).emit()
-	// })
+	socket.on('rfid', function(obj){
+		//obj = user: user._id, progress: progress}
+		waitAndSend(obj.user, obj.progress+1);
+	})
 })
 
 server.listen(port , () => console.log('Listening on port ' + port))
