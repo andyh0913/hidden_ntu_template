@@ -73,6 +73,7 @@ server.on('query', (query) => {
                     var point = q.split(',')[2];
                     trigPoint(card, point)
                     .then((user) => {
+                        if (!user) throw 'user not found'
                         logger.log('info', 'User %s trigger point.', user.name)
                         query.addAnswer(domain, okAns, ttl);
                         server.send(query);
