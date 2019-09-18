@@ -16,7 +16,10 @@ const logger = winston.createLogger({
 });
 const { formatter, timestamp } = wcf();
 
-logger.add(new winston.transports.Console, { formatter, timestamp });
+// logger.add(new winston.transports.Console, { formatter, timestamp });
+logger.add(new winston.transports.Console({
+    format: winston.format.simple()
+  }));
 
 var server = named.createServer();
 var ttl = 5;
