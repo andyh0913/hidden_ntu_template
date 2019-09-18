@@ -10,7 +10,7 @@ mongoose.connect(mongoURL, {useNewUrlParser: true});
 var named = require('node-named');
 
 const winston = require('winston');
-const wcf = require('winston-console-formatter');
+// const wcf = require('winston-console-formatter');
 const logger = winston.createLogger({
   level: 'silly'
 });
@@ -18,7 +18,11 @@ const { formatter, timestamp } = wcf();
 
 // logger.add(new winston.transports.Console, { formatter, timestamp });
 logger.add(new winston.transports.Console({
-    format: winston.format.simple()
+    format: winston.format.combine(
+        winston.format.splat(),
+        winston.format.simple()
+    ),
+    transports: [new winston.transports.Console()]
   }));
 
 var server = named.createServer();
