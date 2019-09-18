@@ -29,7 +29,13 @@ server.listen(53, '::ffff:0.0.0.0', () => {
 });
 
 const point2progress = {
-
+    '1': 52,
+    '2': 67,
+    '3': 89,
+    '4': 115,
+    '5': 129,
+    '6': 147,
+    '7': 219
 }	
 
 async function trigPoint(card, point) {
