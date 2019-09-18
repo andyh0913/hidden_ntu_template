@@ -43,7 +43,7 @@ async function trigPoint(card, point) {
     if (point2progress[point] !== user.progress) throw 'wrong progress'
     socket.emit('rfid', {
         user: user._id,
-        progress: progress
+        progress: user.progress
     })
     return user;
 }
