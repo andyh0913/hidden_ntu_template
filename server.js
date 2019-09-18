@@ -102,11 +102,11 @@ const sendMessage = (id, progress, content, speaker) => {
 }
 
 const waitAndSend = (id, progress) => {
-	if(!onlineUsers.hasOwnProperty(id)) return; // stop sending message
 	const message = script[progress];
 	var timeout = message.wait;
 	sendMessage(id, progress, message.content, message.speaker);
 	setSender(id, progress);
+	if(!onlineUsers.hasOwnProperty(id)) return; // stop sending message
 	if (timeout > 0){
 		setTimeout(() => {
 			waitAndSend(id, progress + 1);
