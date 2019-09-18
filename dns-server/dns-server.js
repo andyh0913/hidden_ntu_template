@@ -14,7 +14,7 @@ const winston = require('winston');
 const logger = winston.createLogger({
   level: 'silly'
 });
-const { formatter, timestamp } = wcf();
+// const { formatter, timestamp } = wcf();
 
 // logger.add(new winston.transports.Console, { formatter, timestamp });
 logger.add(new winston.transports.Console({
