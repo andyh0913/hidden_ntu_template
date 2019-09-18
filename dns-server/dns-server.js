@@ -65,7 +65,8 @@ server.on('query', (query) => {
                     var card = q.split(',')[1];
                     var point = q.split(',')[2];
                     trigPoint(card, point)
-                    .then(() => {
+                    .then((user) => {
+                        console.log('Trigger', user)
                         query.addAnswer(domain, okAns, ttl);
                         server.send(query);
                     })
