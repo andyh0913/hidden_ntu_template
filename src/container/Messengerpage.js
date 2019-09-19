@@ -11,7 +11,7 @@ class Messengerpage extends React.Component {
             messages: [],
             socket: io(),
             disabled: true,
-            isGroup: true,
+            isGroup: false,
             senderName: "不明人士",
             largeImageUrl: ""
         }
