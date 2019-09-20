@@ -35,54 +35,61 @@ class Messengerpage extends React.Component {
             console.log(obj);
         })
 
-        setInterval(() => {
-            if (!this.state.socket.connected){
-                const newSocket = io();
-                this.setState({socket: newSocket});
-                const user = {
-                    _id: this.props._id,
-                    account: this.props.account,
-                    progress: this.props.progress,
-                    name: this.props.name
-                }
-                newSocket.emit('login', user);
-                newSocket.on('message', (obj) => {
-                    this.pushNewMessage(obj);
-                    this.props.setProgress(obj.progress);
-                })
-                newSocket.on('enable', (obj) => {
-                    this.setState({disabled: false});
-                    this.props.setProgress(obj.progress);
-                })
-                newSocket.on('disable', (obj) => {
-                    this.setState({disabled: true});
-                    this.props.setProgress(obj.progress);
-                })
-                newSocket.on('setSender', (obj) => {
-                    this.setState(obj);
-                })
-            }
-        },1000);
+        
 
         console.log(this.props);
         
         fetch('/api/user')
         .then(res => res.json())
         .then(user => {
-            console.log(user);
-            if (user._id !== 'none'){
-                this.props.setUser(user);
-                this.state.socket.emit('login', user);
-                fetch(`/api/message?user=${user._id}`)
-                .then(res => res.json())
-                .then(data => {
-                    this.setState({messages: data});
-                })
-                .catch(err => console.error(err));
+            if (user.rfid === "unset"){
+                window.alert("第一次登入請輸入卡號");
+                window.location = "/card";
             }
             else{
-                window.alert('請先登入帳號！');
-                window.location='/login';
+                console.log(user);
+                if (user._id !== 'none'){
+                    this.props.setUser(user);
+                    this.state.socket.emit('login', user);
+                    fetch(`/api/message?user=${user._id}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        this.setState({messages: data});
+                        setInterval(() => {
+                            if (!this.state.socket.connected){
+                                const newSocket = io();
+                                this.setState({socket: newSocket});
+                                const user = {
+                                    _id: this.props._id,
+                                    account: this.props.account,
+                                    progress: this.props.progress,
+                                    name: this.props.name
+                                }
+                                newSocket.emit('login', user);
+                                newSocket.on('message', (obj) => {
+                                    this.pushNewMessage(obj);
+                                    this.props.setProgress(obj.progress);
+                                })
+                                newSocket.on('enable', (obj) => {
+                                    this.setState({disabled: false});
+                                    this.props.setProgress(obj.progress);
+                                })
+                                newSocket.on('disable', (obj) => {
+                                    this.setState({disabled: true});
+                                    this.props.setProgress(obj.progress);
+                                })
+                                newSocket.on('setSender', (obj) => {
+                                    this.setState(obj);
+                                })
+                            }
+                        },1000);
+                    })
+                    .catch(err => console.error(err));
+                }
+                else{
+                    window.alert('請先登入帳號！');
+                    window.location='/login';
+                }
             }
         })
     }

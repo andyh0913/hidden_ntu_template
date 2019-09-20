@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require('../model/User');
+const Rfid = require('../model/Rfid')
 const bcrypt = require('bcrypt');
 
 router.post('/login', (req, res) => {
@@ -40,6 +41,40 @@ router.post('/login', (req, res) => {
             }
         })
     }
+})
+
+router.post('/card', (req, res) => {
+    const card = req.body.card;
+    const uid = req.session.uid;
+    Rfid.findOne({id: card}, (err, rfid) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send("Server Error.");
+        }
+        else if (rfid) {
+            User.findById(uid, function(err, user){
+                if (err){
+                    console.log(err);
+                    res.status(500).send("Server Error");
+                }
+                else if (user){
+                    user.rfid = rfid.id;
+                    user.save().then((user)=>{
+                        console.log(`Card ID saved: ${user.name}: ${user.rfid}`);
+                        res.redirect("/messenger");
+                    }, (err)=>{
+                        console.log(err);
+                    });
+                }
+                else {
+                    res.redirect("/card/User Not Found")
+                }
+            })
+        }
+        else {
+            res.redirect('/card/Invalid card ID')
+        }
+    })
 })
 
 router.get("/logout", (req, res) => {

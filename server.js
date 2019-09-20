@@ -114,6 +114,15 @@ const waitAndSend = (id, progress) => {
 	}
 	else if (timeout === 0){ // enable user input
 		io.to(id).emit("enable", {progress: progress+1});
+		User.findById(id, (err, user)=>{
+			if (err) console.log(err);
+			user.progress = progress+1;
+			user.save().then((user)=>{
+				console.log(`Update progress: ${user.name}-${user.progress}`);
+			}, (err)=>{
+				console.log(err);
+			});
+		})
 	}
 }
 
@@ -157,6 +166,15 @@ io.on('connection', function (socket) {
 			}
 			else if(script[obj.progress].wait === 0){
 				socket.emit("enable", {progress: obj.progress+1});
+				User.findById(obj._id, (err, user)=>{
+					if (err) console.log(err);
+					user.progress = obj.progress+1;
+					user.save().then((user)=>{
+						console.log(`Update progress: ${user.name}-${user.progress}`);
+					}, (err)=>{
+						console.log(err);
+					});
+				})
 			}
 			else{
 				socket.emit("enable", {progress: obj.progress});
@@ -203,6 +221,7 @@ io.on('connection', function (socket) {
 
 	// for dns-server
 	socket.on('rfid', function(obj){
+		console.log("receive rfid socket");
 		//obj = user: user._id, progress: progress}
 		waitAndSend(obj.user, obj.progress+1);
 	})

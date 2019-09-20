@@ -11,7 +11,7 @@ router.get('/message', (req, res) => {
 
 router.get('/user', (req, res) => {
     if(req.session.isLogin){
-        User.findById(req.session.uid, '_id name account progress', (err, _user) => {
+        User.findById(req.session.uid, '_id name account progress rfid', (err, _user) => {
             if(err){
                 console.error(err);
                 res.status(500).send("Server error");

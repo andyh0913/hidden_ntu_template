@@ -5,6 +5,7 @@ import Homepage from './container/Homepage'
 import MenuContainer from './container/MenuContainer'
 import Messengerpage from './container/Messengerpage'
 import Loginpage from './container/Loginpage'
+import Cardpage from './container/Cardpage'
 
 class App extends React.Component {
   constructor(props){
@@ -46,6 +47,7 @@ class App extends React.Component {
           <MenuContainer name={this.state.name}></MenuContainer>
           <Route exact path="/" component={Homepage}></Route>
           <Route exact path="/login" render={()=> <Loginpage name={this.state.name}></Loginpage>}></Route>
+          <Route exact path="/card" component={Cardpage}></Route>
           <Route exact path="/messenger" render={() => <Messengerpage {...this.state} setUser={this.setUser} setProgress={this.setProgress} ></Messengerpage>} ></Route>
         </div>
       </BrowserRouter>
