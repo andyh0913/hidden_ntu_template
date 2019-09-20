@@ -129,10 +129,10 @@ const waitAndSend = (id, progress) => {
 const setSender = (id, progress) => {
 	let isGroup = progress<=158?false:true;
 	let name = "";
-	if (progress<=9) name = "不明人士";
-	else if (progress<=158) name = "漢森‧丹尼斯";
-	else if (progress<=162) name = "漢森‧丹尼斯、不明人士";
-	else name = "漢森‧丹尼斯、喬伊";
+	if (progress<=8) name = "不明人士";
+	else if (progress<=160) name = "丹尼斯‧漢森";
+	else if (progress<=164) name = "丹尼斯‧漢森、不明人士";
+	else name = "丹尼斯‧漢森、喬伊";
 	io.to(id).emit('setSender', {senderName: name, isGroup: isGroup})
 }
 
