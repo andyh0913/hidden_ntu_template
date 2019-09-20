@@ -127,7 +127,7 @@ const waitAndSend = (id, progress) => {
 }
 
 const setSender = (id, progress) => {
-	let isGroup = progress<=158?false:true;
+	let isGroup = progress<=160?false:true;
 	let name = "";
 	if (progress<=8) name = "不明人士";
 	else if (progress<=160) name = "丹尼斯‧漢森";
