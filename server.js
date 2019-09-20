@@ -143,7 +143,7 @@ var onlineCount = 0;
 io.on('connection', function (socket) {
 	socket.on('login', function(obj) {
 		if(onlineUsers.hasOwnProperty(obj._id)) {
-			console.log('Delete extra socket')
+			// console.log('Delete extra socket')
 			socket.disconnect();
 			return;
 		}
