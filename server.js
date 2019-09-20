@@ -91,7 +91,7 @@ const sendMessage = (id, progress, content, speaker) => {
 		io.to(id).emit('message', message);
 		User.findById(id, (err, user)=>{
 			if (err) console.log(err);
-			user.progress = progress;
+			if (user.progress<progress) user.progress = progress;
 			user.save().then((user)=>{
 				console.log(`Update progress: ${user.name}-${user.progress}`);
 			}, (err)=>{
@@ -116,7 +116,7 @@ const waitAndSend = (id, progress) => {
 		io.to(id).emit("enable", {progress: progress+1});
 		User.findById(id, (err, user)=>{
 			if (err) console.log(err);
-			user.progress = progress+1;
+			if (user.progress<progress+1) user.progress = progress+1;
 			user.save().then((user)=>{
 				console.log(`Update progress: ${user.name}-${user.progress}`);
 			}, (err)=>{
@@ -168,7 +168,7 @@ io.on('connection', function (socket) {
 				socket.emit("enable", {progress: obj.progress+1});
 				User.findById(obj._id, (err, user)=>{
 					if (err) console.log(err);
-					user.progress = obj.progress+1;
+					if (user.progress<obj.progress+1) user.progress = obj.progress+1;
 					user.save().then((user)=>{
 						console.log(`Update progress: ${user.name}-${user.progress}`);
 					}, (err)=>{
@@ -199,7 +199,7 @@ io.on('connection', function (socket) {
 			console.log(`Message-${message.progress} saved`);
 			User.findById(message.user, (err, user)=>{
 				if (err) console.log(err);
-				user.progress = message.progress;
+				if (user.progress<message.progress) user.progress = message.progress;
 				user.save().then((user)=>{
 					console.log(`Update progress: ${user.name}-${user.progress}`);
 				}, (err)=>{
