@@ -222,6 +222,7 @@ io.on('connection', function (socket) {
 	// for dns-server
 	socket.on('rfid', function(obj){
 		console.log("receive rfid socket");
+		io.to(obj.user).emit('disable', {progress: obj.progress+1})
 		//obj = user: user._id, progress: progress}
 		waitAndSend(obj.user, obj.progress+1);
 	})
