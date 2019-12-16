@@ -42,10 +42,11 @@ class Messengerpage extends React.Component {
         fetch('/api/user')
         .then(res => res.json())
         .then(user => {
-            if (user.rfid === "unset"){
-                window.alert("第一次登入請輸入卡號");
-                window.location = "/card";
-            }
+            // if (user.rfid === "unset"){
+            //     window.alert("第一次登入請輸入卡號");
+            //     window.location = "/card";
+            // }
+            if (false){}
             else{
                 console.log(user);
                 if (user._id !== 'none'){
